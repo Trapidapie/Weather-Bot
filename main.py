@@ -11,7 +11,7 @@ def start(message):
 
 @bot.message_handler(content_types=['text'])
 def get_weather_now(message):
-    city = message.text.strip().lower()
+    city = message.text.strip().lower()[1:]
     res = requests.get(f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid={API}&units=metric')
     data = json.loads(res.text)
     if res.status_code == 200:
@@ -222,10 +222,10 @@ def get_weather_now(message):
             temp_smile = '🥶'
         else:
             temp_smile = '🌡'
-        message_text = f'{message.text.title()}{country_smile}\ntemp is: {temp}°C{temp_smile}\n{weather.title()}💨 wind:{wind} m/s'
+        message_text = f'{city.title()}{country_smile}\ntemp is: {temp}°C{temp_smile}\n{weather.title()}💨 wind:{wind} m/s'
         bot.reply_to(message, message_text)
     else:
-        bot.reply_to(message, f'Error, location named {message.text} was not found, please try again')
+        bot.reply_to(message, f'Error, location named {city} was not found, please try again')
 
 if __name__ == '__main__':
     bot.polling(none_stop=True)
